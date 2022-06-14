@@ -19,6 +19,9 @@ class Semestres(tk.Toplevel):
         self.estilo = ttk.Style(self)
         self.estilo.theme_use('clam')
 
+        # adiciona os componentes
+        self.cria_widgets()
+
     def cria_widgets(self):
         # criar um frame de nome input_frame
         self.input_frame = ttk.Frame(self, padding=(20, 10, 20, 0))
@@ -26,4 +29,8 @@ class Semestres(tk.Toplevel):
 
         # criando um Label
         self.label_ano = ttk.Label(self.input_frame, text='Ano: ')
-        self.label_ano.grid(row=0, column=0, sticky=tk.W)
+        self.label_ano.grid(row=0, column=0, sticky="W")
+
+        # entry para ano
+        self.entry_ano = ttk.Entry(self.input_frame, width=15, state='disabled')
+        self.entry_ano.grid(row=0, column=1, sticky="W")
