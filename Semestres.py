@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from database import Database
+import re
 
 class Semestres(tk.Toplevel):
     def __init__(self, parent):
@@ -85,7 +86,7 @@ class Semestres(tk.Toplevel):
         self.botao_novo.grid(row=0, column=0)
         self.botao_novo.focus()
 
-        self.botao_salvar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Salvar")
+        self.botao_salvar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Salvar", command=self.cadastra_semestre)
         self.botao_salvar.grid(row=0, column=1)
 
         self.botao_alterar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Alterar")
@@ -109,7 +110,13 @@ class Semestres(tk.Toplevel):
         self.entry_ano.focus()
 
     def cadastra_semestre(self):
-        pass
+        if re.findall('^2[0-9]{3}$', self.entry_ano.get()):
+            print(self.entry_ano.get())
+        else:
+            print('Erro!')
+
+
+
 
 
 
