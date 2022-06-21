@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from database import Database
 import re
+from tkinter import messagebox
 
 class Semestres(tk.Toplevel):
     def __init__(self, parent):
@@ -109,11 +110,25 @@ class Semestres(tk.Toplevel):
         # mandando o foco para ele
         self.entry_ano.focus()
 
+    def limpa_campos(self):
+        self.entry_ano.delete(0, tk.END)
+        self.combobox_semestre.delete(0, tk.END)
+
     def cadastra_semestre(self):
+        # o modulo re ajuda a digitar os anos apenas no formato: 2022
         if re.findall('^2[0-9]{3}$', self.entry_ano.get()):
-            print(self.entry_ano.get())
+            linhas, erro = self.conexao.insere_semestre(self.entry_ano.get(), self.combobox_semestre.get())
+            if linhas is not None:
+                messagebox.showinfo(title="Sucesso", message="Semestre cadastrado com sucesso!")
+                self.limpa_campos()
+            else:
+                if erro == 1:
+                    messagebox.showwarning(title="Que pena", message="Semestre não foi cadastrado! \n "
+                                                                     "Chave primária duplicada")
+                else:
+                    messagebox.showwarning(title="Que pena", message="Erro ao tentar cadastrar o semestre!")
         else:
-            print('Erro!')
+            messagebox.showerror(title="Eita", message="Ano deve ser inserido com 4 digitos.Ex. 2022")
 
 
 

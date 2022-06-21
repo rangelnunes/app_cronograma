@@ -51,10 +51,18 @@ class Database():
         try:
             with self.conexao:
                 with self.conexao.cursor() as cursor:
+                    linhas = None
+                    erro = None
                     cursor.execute(self.INSERE_SEMESTRE, (int(ano), int(semestre)))
+                    linhas = cursor.rowcount
                     print('Semestre cadastrado com sucesso!')
+        except psycopg2.IntegrityError:
+            erro = 1
         except Exception as erro:
+            erro = 2
             print(f'Erro ao cadastrar o semestre: {erro}')
+
+        return linhas, erro
 
     def consulta_semestres(self):
         try:
