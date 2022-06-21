@@ -65,6 +65,61 @@ class Semestres(tk.Toplevel):
         # definir os cabeçalhos
         self.treeview_semestres.heading('Ano', text='Ano')
         self.treeview_semestres.heading('Semestre', text='Semestre')
+
+        # ajustando colunas
+        self.treeview_semestres.column('Ano', anchor=tk.CENTER, width=220)
+        self.treeview_semestres.column('Semestre', anchor=tk.CENTER, width=220)
+
         self.treeview_semestres.grid(row=0, column=0, sticky='EW', pady=15)
+
+        # adicionando uma barra de rolagem
+        self.scrollbar = ttk.Scrollbar(self.treeview_frame, orient = tk.VERTICAL, command=self.treeview_semestres.yview)
+        self.treeview_semestres.configure(yscroll=self.scrollbar.set)
+        self.scrollbar.grid(row=0, column=1, sticky='ns')
+
+        # adicionando botoes
+        self.botoes_frame = ttk.Frame(self)
+        self.botoes_frame.grid(row=2, column=0, pady=3)
+
+        self.botao_novo = ttk.Button(self.botoes_frame, text="Novo", command=self.novo)
+        self.botao_novo.grid(row=0, column=0)
+        self.botao_novo.focus()
+
+        self.botao_salvar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Salvar")
+        self.botao_salvar.grid(row=0, column=1)
+
+        self.botao_alterar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Alterar")
+        self.botao_alterar.grid(row=0, column=2)
+
+        self.botao_excluir = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Excluir")
+        self.botao_excluir.grid(row=0, column=3)
+
+        self.botao_sair = ttk.Button(self.botoes_frame, text="Sair", command=self.destroy)
+        self.botao_sair.grid(row=0, column=4)
+
+    # implementar os metodos
+    def novo(self):
+        # deixar o botao salvar normal
+        self.botao_salvar['state'] = 'NORMAL'
+        # deixar o entry_ano normal
+        self.entry_ano['state'] = 'NORMAL'
+        # apagando o conteudo do componente entry_ano
+        self.entry_ano.delete(0, tk.END)
+        # mandando o foco para ele
+        self.entry_ano.focus()
+
+    def cadastra_semestre(self):
+        pass
+
+
+
+
+
+
+
+
+
+
+
 
 
