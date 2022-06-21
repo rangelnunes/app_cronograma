@@ -130,7 +130,8 @@ class Semestres(tk.Toplevel):
         else:
             messagebox.showerror(title="Eita", message="Ano deve ser inserido com 4 digitos.Ex. 2022")
 
-
+        self.limpa_campos()
+        self.entry_ano.focus()
 
 
 
