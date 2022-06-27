@@ -25,6 +25,9 @@ class Semestres(tk.Toplevel):
         # adiciona os componentes
         self.cria_widgets()
 
+        # carrega o treeview
+        self.view_semestres()
+
     def cria_widgets(self):
         # definir estilo para os widgets
         self.estilo.configure('TFrame', background='#F2F2F2')
@@ -132,6 +135,18 @@ class Semestres(tk.Toplevel):
 
         self.limpa_campos()
         self.entry_ano.focus()
+        self.view_semestres()
+
+    def view_semestres(self):
+        # limpar o treeview
+        for item in self.treeview_semestres.get_children():
+            self.treeview_semestres.delete(item)
+
+        linhas = self.conexao.consulta_semestres()
+        print(linhas)
+
+        for linha in linhas:
+            self.treeview_semestres.insert("", tk.END, values=(linha[0], linha[1]))
 
 
 
