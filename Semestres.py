@@ -10,6 +10,7 @@ class Semestres(tk.Toplevel):
 
         # estabelecendo a conexao com o banco de dados
         self.conexao = Database()
+        self.conexao.create_tables()
 
         # coloquem um titulo: gerenciamento de semestres
         self.title('Gerenciamento de semestres')
@@ -27,6 +28,9 @@ class Semestres(tk.Toplevel):
 
         # carrega o treeview
         self.view_semestres()
+
+        # criar um evento para capturar a linha selecionada
+        self.treeview_semestres.bind("<<TreeviewSelect>>", self.item_selecionado_treeview)
 
     def cria_widgets(self):
         # definir estilo para os widgets
@@ -145,8 +149,24 @@ class Semestres(tk.Toplevel):
         linhas = self.conexao.consulta_semestres()
         print(linhas)
 
-        for linha in linhas:
-            self.treeview_semestres.insert("", tk.END, values=(linha[0], linha[1]))
+        if len(linhas) > 0:
+            for linha in linhas:
+                self.treeview_semestres.insert("", tk.END, values=(linha[0], linha[1]))
+        else:
+            messagebox.showinfo(title="Aviso", message="Não existem semestres cadastrados!")
+
+
+    def item_selecionado_treeview(self, event):
+        self.botao_excluir['state'] = tk.NORMAL
+        self.botao_alterar['state'] = tk.NORMAL
+        self.entry_ano['state'] = tk.NORMAL
+        self.entry_ano.delete(0, tk.END)
+        self.combobox_semestre.delete(0, tk.END)
+
+        for linha in self.treeview_semestres.selection():
+            ano, semestre = self.treeview_semestres.item(linha, 'values')
+            self.entry_ano.insert(tk.END, ano)
+            self.combobox_semestre.set(semestre)
 
 
 
