@@ -32,11 +32,15 @@ class Database():
     def deleta_semestre(self, ano, semestre):
         try:
             with self.conexao:
-                with self.conexao.cursor as cursor:
-                    cursor.execute(self.DELETA_SEMESTRE, (ano, int(semestre)))
+                with self.conexao.cursor() as cursor:
+                    linhas = None
+                    cursor.execute(self.DELETA_SEMESTRE, (ano, semestre))
+                    linhas = cursor.rowcount
                     print('Semestre excluido com sucesso!!')
         except Exception as erro:
             print(f'Erro ao excluir o semestre: {erro}')
+
+        return linhas
 
     def create_tables(self):
         try:
@@ -77,10 +81,14 @@ class Database():
         try:
             with self.conexao:
                 with self.conexao.cursor() as cursor:
+                    linhas = None
                     cursor.execute(self.UPDATE_SEMESTRE, (novo_ano, novo_semestre, ano, semestre))
+                    linhas = cursor.rowcount
                     print('Semestre alterado com sucesso!')
         except Exception as erro:
             print(f'Erro ao alterar o semestre: {erro}')
+
+        return linhas
 
 
 

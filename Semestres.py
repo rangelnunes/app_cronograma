@@ -97,10 +97,11 @@ class Semestres(tk.Toplevel):
         self.botao_salvar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Salvar", command=self.cadastra_semestre)
         self.botao_salvar.grid(row=0, column=1)
 
-        self.botao_alterar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Alterar")
+        self.botao_alterar = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Alterar", command=self.altera_semestre)
         self.botao_alterar.grid(row=0, column=2)
 
-        self.botao_excluir = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Excluir")
+        self.botao_excluir = ttk.Button(self.botoes_frame, state=tk.DISABLED, text="Excluir",
+                                        command=self.excluir_semestre)
         self.botao_excluir.grid(row=0, column=3)
 
         self.botao_sair = ttk.Button(self.botoes_frame, text="Sair", command=self.destroy)
@@ -168,10 +169,44 @@ class Semestres(tk.Toplevel):
             self.entry_ano.insert(tk.END, ano)
             self.combobox_semestre.set(semestre)
 
+    def excluir_semestre(self):
+        selecionado = self.treeview_semestres.focus()
+        ano = self.treeview_semestres.item(selecionado, 'value')[0]
+        semestre = self.treeview_semestres.item(selecionado, 'value')[1]
 
+        resposta = messagebox.askokcancel('Confirmação', 'Deseja realmente exlcuir este semestre?')
 
+        if resposta:
+            linhas = self.conexao.deleta_semestre(ano, semestre)
 
+            if linhas is not None:
+                messagebox.showinfo(title="Sucesso", message="Semestre excluido com sucesso!")
+            else:
+                messagebox.showwarning(title="Que pena!", message="Não foi possível excluir o semestre")
+        self.limpa_campos()
+        self.botao_excluir['state'] = tk.DISABLED
+        self.botao_alterar['state'] = tk.DISABLED
+        self.view_semestres()
 
+    def altera_semestre(self):
+        selecionado = self.treeview_semestres.focus()
+        ano = self.treeview_semestres.item(selecionado, 'value')[0]
+        semestre = self.treeview_semestres.item(selecionado, 'value')[1]
+
+        resposta = messagebox.askokcancel('Confirmação', 'Deseja realmente alterar o semestre?')
+
+        if resposta:
+            linhas = self.conexao.update_semestre(self.entry_ano.get(), self.combobox_semestre.get(), ano, semestre)
+
+            if linhas is not None:
+                messagebox.showinfo(title="Sucesso", message="Semestre alterado com sucesso!")
+            else:
+                messagebox.showwarning(title="Que pena!", message="Erro ao alterar o semestre!")
+
+        self.limpa_campos()
+        self.botao_alterar['state'] = tk.DISABLED
+        self.botao_excluir['state'] = tk.DISABLED
+        self.view_semestres()
 
 
 
